@@ -1,65 +1,39 @@
 DROP DATABASE IF EXISTS chez_moose;
--- CREATE SCHEMA chez_moose;
+-- SELECT SCHEMA chez_moose;
 USE chez_moose;
 
-CREATE TABLE IF NOT EXISTS meals (
-  meal_id      SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  meal_name    VARCHAR(40) NOT NULL,
-  date_added   DATETIME NOT NULL,
-  meal_price   SMALLINT NOT NULL,
-  last_updated TIMESTAMP 
-               DEFAULT CURRENT_TIMESTAMP ON UPDATE
-               CURRENT_TIMESTAMP,
-  PRIMARY KEY (meal_id)
-)ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+CREATE TABLE menus(
+    id    BIGINT NOT NULL auto_increment,
+    title VARCHAR(100) not null,
+    PRIMARY KEY(id)
+);
 
-CREATE TABLE IF NOT EXISTS sales (
-  sale_id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  breakfast_profit INT NOT NULL,
-  lunch_profit     INT NOT NULL,
-  dinner_profit    INT NOT NULL,
-  misc_profit      INT NOT NULL,
-  net_profit       INT NOT NULL, 
-  sale_date        DATETIME NOT NULL,
-  last_updated     TIMESTAMP 
-                   DEFAULT CURRENT_TIMESTAMP ON UPDATE
-                   CURRENT_TIMESTAMP,
-  PRIMARY KEY (sale_id)
-)ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+CREATE TABLE meals(
+    id BIGINT NOT NULL auto_increment,
+    menu_id BIGINT,
+    name                  VARCHAR(100),
+    description           VARCHAR(500),
+    price                 DECIMAL(9,2),
+    PRIMARY KEY(id),
+    index menu_id_idx(menu_id),
+    FOREIGN KEY(menu_id)  REFERENCES menus(id) ON DELETE CASCADE,
+    unique key menu_meals (menu_id, NAME)
+);
 
-CREATE TABLE IF NOT EXISTS expenses (
-  expense_id        SMALLINT UNSIGNED NOT NULL AUTO_INCREMENT,
-  cleaning_supplies INT NOT NULL,
-  cooking_tools     INT NOT NULL,
-  ingredients       INT NOT NULL,
-  drinks            INT NOT NULL,
-  silverware        INT NOT NULL,
-  last_updated      TIMESTAMP 
-                    DEFAULT CURRENT_TIMESTAMP ON UPDATE
-                    CURRENT_TIMESTAMP,
-  PRIMARY KEY (expense_id)
-)ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+CREATE TABLE meal_ingredients(
+    id BIGINT NOT NULL auto_increment,
+    meal_id BIGINT,
+    ingredient_id BIGINT,
+    PRIMARY KEY(id),
+    index meal_id_idx(meal_id),
+    index ingredient_id_idx(ingredient_id)
+);
 
-CREATE TABLE IF NOT EXISTS inventory (
-  item_id          INT UNSIGNED NOT NULL AUTO_INCREMENT,
-  item_type        VARCHAR(20),
-  item_name        VARCHAR(40) NOT NULL,
-  expires          DATE NOT NULL,
-  number_of_units  INT,
-  last_updated     TIMESTAMP 
-                   DEFAULT CURRENT_TIMESTAMP ON UPDATE
-                   CURRENT_TIMESTAMP,
-  PRIMARY KEY (item_id)
-)ENGINE=InnoDB DEFAULT CHARSET=UTF8;
-
-CREATE TABLE IF NOT EXISTS drinks (
-	drink_id INT UNSIGNED NOT NULL AUTO_INCREMENT,
-    drink_type VARCHAR(20),
-    drink_name VARCHAR(30),
-    expires DATE NOT NULL,
-    number_of_units INT,
-    last_updated TIMESTAMP
-				 DEFAULT CURRENT_TIMESTAMP ON UPDATE 
-                 CURRENT_TIMESTAMP,
-	PRIMARY KEY (drink_id)
-)ENGINE=InnoDB DEFAULT CHARSET=UTF8;
+CREATE TABLE ingredients(
+    id BIGINT NOT NULL auto_increment,
+    meal_id BIGINT,
+    NAME VARCHAR(100),
+    PRIMARY KEY(id),
+    index meal_id_idx(meal_id),
+    FOREIGN KEY(meal_id) REFERENCES meals(id) ON DELETE CASCADE
+);
