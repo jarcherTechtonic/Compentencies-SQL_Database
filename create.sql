@@ -5,16 +5,9 @@ USE chez_moose;
 DROP TABLE IF EXISTS menus;
 
 CREATE TABLE menus(
-<<<<<<< Updated upstream
     id      BIGINT NOT NULL AUTO_INCREMENT,
     title   VARCHAR(100) NOT NULL,
     PRIMARY KEY (id)
-=======
-    id    BIGINT NOT NULL auto_increment,
-    title VARCHAR(100) NOT NULL,
-    PRIMARY KEY(id)
->>>>>>> Stashed changes
-);
 
 DROP TABLE IF EXISTS meals;
 CREATE TABLE meals(
@@ -26,11 +19,6 @@ CREATE TABLE meals(
     PRIMARY KEY                   (id),
     index menu_id_idx(menu_id),
     FOREIGN KEY(menu_id)  REFERENCES menus(id) ON DELETE CASCADE,
-<<<<<<< Updated upstream
-    unique key menu_meals (menu_id, name)
-=======
-    unique key menu_meals (menu_id, NAM)
->>>>>>> Stashed changes
 );
 
 DROP TABLE IF EXISTS meal_ingredients;
